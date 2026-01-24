@@ -1,0 +1,22 @@
+/* Сброс отступов и box-model*/
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Стили для всей страницы */
+body {
+    font-family: Arial, sans-serif; /* Базовый шрифт */
+    background: #f0f2f5; /* Светлый фон */
+    padding: 20px; /* Отступ от краев */
+}
+/* Основной контейнер */
+.container {
+    max-width: 600px; /* Ограничение ширины */
+    margin: 0 auto; /* Выравнивание по центру */
+    background: white; /* Белый фон контейнера */
+    padding: 30px; /* Внутренние отступы */
+    border-radius: 10px; /* Закругленные углы */
+}
+/* Заголовок */
+h1 { color: #6a11cb; margin-bottom: 10px; }
+/* Подзаголовок */
+.subtitle { color: #666; margin-bottom: 30px; }
+/*  Кнопка */
+.btn { background: #6a11cb; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; }
