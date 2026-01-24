@@ -20,5 +20,38 @@ h1 { color: #6a11cb; margin-bottom: 10px; }
 .subtitle { color: #666; margin-bottom: 30px; }
 /*  Кнопка */
 .btn { background: #6a11cb; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; }
-/* 16: Скрытые элементы */
+/* Скрытые элементы */
 .hidden { display: none; }
+/* ФОРМА ДЛЯ ИДЕЙ */
+.idea-form {
+    margin: 30px 0;
+}
+.idea-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    margin: 10px 0;
+}
+/* СПИСОК ИДЕЙ */
+.ideas-section {
+    margin: 30px 0;
+}
+#ideasCount {
+    color: #6a11cb;
+}
+.empty-message {
+    color: #888;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
+/* КАРТОЧКА ИДЕИ */
+.idea-card {
+    background: #f8f9fa;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border-left: 4px solid #6a11cb;
+}
