@@ -56,3 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCounter();  
         console.log(`Теперь идей: ${ideas.length}`);
     }
+     // Обработчик для кнопки "Добавить идею"
+    if (addIdeaBtn) {
+        addIdeaBtn.addEventListener('click', addIdea);
+        console.log('Обработчик добавлен на кнопку');
+    }
+    console.log('✅ Блокнот идей готов к работе');

@@ -10,8 +10,26 @@
     <div class="container">
         <h1>🎨 ArtFlow Assistant</h1>
         <p class="subtitle">Цифровая мастерская для художников</p>
-        <div class="content">
-            <p>Начало проекта. Версия 0.1</p>
+        <!-- ФОРМА ДЛЯ ДОБАВЛЕНИЯ ИДЕИ -->
+        <div class="idea-form">
+            <h2>💡 Добавить идею</h2>
+            <input type="text" 
+                   id="ideaInput" 
+                   placeholder="Например: нарисовать закат над озером..."
+                   class="idea-input">
+            <button id="addIdeaBtn" class="btn">Добавить идею</button>
+            <p class="form-hint">Идея будет сохранена в вашем браузере</p>
+        </div>
+        <!-- СПИСОК ИДЕЙ -->
+        <div class="ideas-section">
+            <h2>📝 Мои идеи <span id="ideasCount">(0)</span></h2>
+            <div id="ideasList" class="ideas-list">
+                <p class="empty-message">Пока нет идей. Добавьте первую!</p>
+            </div>
+        </div>
+        <!-- ТЕСТОВАЯ СЕКЦИЯ -->
+         <div class="content">
+            <p>Начало проекта. Версия 0.2</p>
             <button id="testBtn" class="btn">Проверить JS</button>
             <p id="message" class="hidden">✅ JavaScript работает!</p>
         </div>
