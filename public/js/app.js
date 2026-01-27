@@ -1,5 +1,5 @@
 // Сообщение при загрузке скрипта
-console.log('ArtFlow Assistant v0.1 запущен!');
+console.log('ArtFlow Assistant v0.2 запущен!');
 // Полная загрузка  
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM готов');
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         list: ideasList,
         counter: ideasCount
     });
-});
     // Массив для хранения идей
     let ideas = [];
     // Функция для обновления счетчика
@@ -54,11 +53,41 @@ document.addEventListener('DOMContentLoaded', () => {
         ideaInput.value = '';
         // Обновляем счетчик
         updateCounter();  
+        showIdeas(); // ПОКАЗЫВАЕМ ИДЕИ В СПИСКЕ
         console.log(`Теперь идей: ${ideas.length}`);
     }
+     // Функция для показа идей в списке
+     function showIdeas() {
+        console.log('Показываю идеи...')
+        //Очищаем список
+        ideasList.innerHTML = '';
+        //Сообщение, если нет идей
+        if (ideas.length === 0) {
+             ideasList.innerHTML = '<p class="empty-message">Пока нет идей. Добавьте первую!</p>';
+            return;
+         }
+         //Для каждой идеи создаем элемент
+         ideas.forEach(function(ideaText) {
+            const ideaElement = document.createElement('div');
+            ideaElement.className = 'idea-item';
+            ideaElement.textContent = ideaText;
+            ideasList.appendChild(ideaElement);
+         });
+        console.log('Показано идей:', ideas.length);
+     }
      // Обработчик для кнопки "Добавить идею"
     if (addIdeaBtn) {
         addIdeaBtn.addEventListener('click', addIdea);
         console.log('Обработчик добавлен на кнопку');
     }
+        // Обработчик для клавиши Enter
+    if (ideaInput) {
+        ideaInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                console.log('Нажат Enter');
+                addIdea();
+            }
+        });
+    }
     console.log('✅ Блокнот идей готов к работе');
+    });
