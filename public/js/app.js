@@ -28,3 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
         counter: ideasCount
     });
 });
+    // Массив для хранения идей
+    let ideas = [];
+    // Функция для обновления счетчика
+    function updateCounter() {
+        if (ideasCount) {
+            ideasCount.textContent = `(${ideas.length})`;
+            console.log(`Счетчик: ${ideas.length} идей`);
+        }
+    }
+    // Инициализируем счетчик
+    updateCounter();
