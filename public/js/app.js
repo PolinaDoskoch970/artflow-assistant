@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // Массив для хранения идей
     let ideas = [];
+    // Загружаем сохраненные идеи из localStorage
+    const savedIdeas = localStorage.getItem('artflow-ideas');
+    if (savedIdeas) {
+        ideas = JSON.parse(savedIdeas);
+        console.log('Загружено идей из localStorage:', ideas.length);
+    }
     // Функция для обновления счетчика
     function updateCounter() {
         if (ideasCount) {
