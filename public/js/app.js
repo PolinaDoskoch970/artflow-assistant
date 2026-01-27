@@ -42,8 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Счетчик: ${ideas.length} идей`);
         }
     }
-    // Инициализируем счетчик
-    updateCounter();
     // Функция для добавления новой идеи
     function addIdea() {
         if (!ideaInput) return;
@@ -96,5 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    // Инициализируем счетчик
+    updateCounter();
+    showIdeas(); //Показываем сохраненные идеи
     console.log('✅ Блокнот идей готов к работе');
     });
