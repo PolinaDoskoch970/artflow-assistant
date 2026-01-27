@@ -39,3 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Инициализируем счетчик
     updateCounter();
+    // Функция для добавления новой идеи
+    function addIdea() {
+        if (!ideaInput) return;
+        const text = ideaInput.value.trim();
+        if (text === '') {
+            console.log('Пустая идея - игнорирую');
+            return;
+        }
+        console.log(`Добавляю идею: "${text}"`);
+        // Добавляем в массив
+        ideas.push(text);
+        // Очищаем поле ввода
+        ideaInput.value = '';
+        // Обновляем счетчик
+        updateCounter();  
+        console.log(`Теперь идей: ${ideas.length}`);
+    }
