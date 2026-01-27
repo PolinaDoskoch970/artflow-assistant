@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Добавляю идею: "${text}"`);
         // Добавляем в массив
         ideas.push(text);
+        localStorage.setItem('artflow-ideas', JSON.stringify(ideas));
         // Очищаем поле ввода
         ideaInput.value = '';
         // Обновляем счетчик
