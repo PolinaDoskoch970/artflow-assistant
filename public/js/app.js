@@ -72,12 +72,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
          }
          //Для каждой идеи создаем элемент
-         ideas.forEach(function(ideaText) {
+        ideas.forEach(function(ideaText, index) {
             const ideaElement = document.createElement('div');
             ideaElement.className = 'idea-item';
-            ideaElement.textContent = ideaText;
+            ideaElement.innerHTML = `
+                <span class="idea-text">${ideaText}</span>
+                <button class="delete-btn" data-index="${index}">🗑️</button>
+            `;
             ideasList.appendChild(ideaElement);
-         });
+            
+            // Добавляем обработчик удаления
+            const deleteBtn = ideaElement.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', function() {
+                const deleteIndex = parseInt(this.getAttribute('data-index'));
+                deleteIdea(deleteIndex);
+            });
+        });
         console.log('Показано идей:', ideas.length);
      }
      // Обработчик для кнопки "Добавить идею"
