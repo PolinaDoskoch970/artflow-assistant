@@ -135,6 +135,33 @@ h1 { color: #6a11cb; margin-bottom: 10px; }
     text-align: center;
     margin-top: 5px;
 }
+/* Цветовая лаборатория - дополнительные стили */
+.color-item {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.color-item:hover {
+    transform: scale(1.1);
+}
+.empty-message {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 30px;
+    width: 100%;
+}
+.secondary-btn {
+    background: #ff6b6b;
+    margin-top: 10px;
+}
+.secondary-btn:hover {
+    background: #ff5252;
+}
 /* Навигация */
 .main-nav {
     display: flex;
