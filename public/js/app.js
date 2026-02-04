@@ -90,6 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         console.log('Показано идей:', ideas.length);
      }
+    // Функция для удаления идеи
+    function deleteIdea(index) {
+        console.log(`Удаляю идею с индексом ${index}: "${ideas[index]}"`);
+        // Удаляем из массива
+        ideas.splice(index, 1);
+        // Сохраняем в localStorage
+        localStorage.setItem('artflow-ideas', JSON.stringify(ideas)); 
+        // Обновляем интерфейс
+        updateCounter();
+        showIdeas();
+    }     
      // Обработчик для кнопки "Добавить идею"
     if (addIdeaBtn) {
         addIdeaBtn.addEventListener('click', addIdea);
