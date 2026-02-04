@@ -27,6 +27,29 @@
                 <p class="empty-message">Пока нет идей. Добавьте первую!</p>
             </div>
         </div>
+        <!-- ЦВЕТОВАЯ ЛАБОРАТОРИЯ -->
+<section id="color-lab" class="content-section hidden">
+    <h2>🎨 Цветовая лаборатория</h2>
+    
+    <div class="color-picker">
+        <input type="color" id="colorInput" value="#6a11cb">
+        <input type="text" id="colorHex" value="#6a11cb" maxlength="7">
+        <button id="addColorBtn" class="btn">Добавить в палитру</button>
+    </div>
+    
+    <div class="color-display">
+        <div id="selectedColor" style="background: #6a11cb;"></div>
+        <p>Выбранный цвет: <span id="colorValue">#6a11cb</span></p>
+    </div>
+    
+    <div class="palette-section">
+        <h3>Моя палитра</h3>
+        <div id="colorPalette" class="palette">
+            <!-- Цвета будут добавляться сюда -->
+        </div>
+        <button id="clearPaletteBtn" class="btn secondary-btn">Очистить палитру</button>
+    </div>
+</section>
         <!-- ТЕСТОВАЯ СЕКЦИЯ -->
          <div class="content">
             <p>Начало проекта. Версия 0.2.2</p>
