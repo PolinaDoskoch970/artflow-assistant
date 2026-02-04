@@ -135,3 +135,41 @@ h1 { color: #6a11cb; margin-bottom: 10px; }
     text-align: center;
     margin-top: 5px;
 }
+/* Навигация */
+.main-nav {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    flex-wrap: wrap;
+}
+.nav-btn {
+    padding: 10px 20px;
+    border: 2px solid #6a11cb;
+    background: white;
+    color: #6a11cb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.nav-btn:hover {
+    background: #f0f2f5;
+}
+.nav-btn.active {
+    background: #6a11cb;
+    color: white;
+}
+/* Секции контента */
+.content-section {
+    display: none;
+    animation: fadeIn 0.3s;
+}
+.content-section.active {
+    display: block;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
