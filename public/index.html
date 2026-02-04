@@ -10,46 +10,59 @@
     <div class="container">
         <h1>🎨 ArtFlow Assistant</h1>
         <p class="subtitle">Цифровая мастерская для художников</p>
-        <!-- ФОРМА ДЛЯ ДОБАВЛЕНИЯ ИДЕИ -->
-        <div class="idea-form">
-            <h2>💡 Добавить идею</h2>
-            <input type="text" 
+        <!-- НАВИГАЦИЯ МЕЖДУ РАЗДЕЛАМИ -->
+        <nav class="main-nav">
+            <button class="nav-btn active" data-section="ideas">💡 Идеи</button>
+            <button class="nav-btn" data-section="colors">🎨 Цвета</button>
+            <button class="nav-btn" data-section="projects">📋 Проекты</button>
+        </nav>
+        <!-- 1. ФОРМА ДЛЯ ДОБАВЛЕНИЯ ИДЕИ -->
+        <div id="ideas-section" class="content-section active">
+             <div class="idea-form">
+                <h2>💡 Добавить идею</h2>
+                <input type="text" 
                    id="ideaInput" 
                    placeholder="Например: нарисовать закат над озером..."
                    class="idea-input">
-            <button id="addIdeaBtn" class="btn">Добавить идею</button>
-            <p class="form-hint">Идея будет сохранена в вашем браузере</p>
-        </div>
-        <!-- СПИСОК ИДЕЙ -->
-        <div class="ideas-section">
-            <h2>📝 Мои идеи <span id="ideasCount">(0)</span></h2>
-            <div id="ideasList" class="ideas-list">
-                <p class="empty-message">Пока нет идей. Добавьте первую!</p>
+                <button id="addIdeaBtn" class="btn">Добавить идею</button>
+                <p class="form-hint">Идея будет сохранена в вашем браузере</p>
             </div>
-        </div>
-        <!-- ЦВЕТОВАЯ ЛАБОРАТОРИЯ -->
-<section id="color-lab" class="content-section hidden">
-    <h2>🎨 Цветовая лаборатория</h2>
+             <!-- СПИСОК ИДЕЙ -->
+            <div class="ideas-section">
+                <h2>📝 Мои идеи <span id="ideasCount">(0)</span></h2>
+                <div id="ideasList" class="ideas-list">
+                    <p class="empty-message">Пока нет идей. Добавьте первую!</p>
+                </div>
+            </div>
+         </div>   
+        <!-- 2. ЦВЕТОВАЯ ЛАБОРАТОРИЯ -->
+        <section id="color-lab" class="content-section hidden">
+            <h2>🎨 Цветовая лаборатория</h2>
 
-    <div class="color-picker">
-        <input type="color" id="colorInput" value="#6a11cb">
-        <input type="text" id="colorHex" value="#6a11cb" maxlength="7">
-        <button id="addColorBtn" class="btn">Добавить в палитру</button>
-    </div>
+            <div class="color-picker">
+                <input type="color" id="colorInput" value="#6a11cb">
+                <input type="text" id="colorHex" value="#6a11cb" maxlength="7">
+                <button id="addColorBtn" class="btn">Добавить в палитру</button>
+            </div>
 
-    <div class="color-display">
-        <div id="selectedColor" style="background: #6a11cb;"></div>
-        <p>Выбранный цвет: <span id="colorValue">#6a11cb</span></p>
-    </div>
+            <div class="color-display">
+                <div id="selectedColor" style="background: #6a11cb;"></div>
+                <p>Выбранный цвет: <span id="colorValue">#6a11cb</span></p>
+            </div>
 
-    <div class="palette-section">
-        <h3>Моя палитра</h3>
-        <div id="colorPalette" class="palette">
-            <!-- Цвета будут добавляться сюда -->
-        </div>
-        <button id="clearPaletteBtn" class="btn secondary-btn">Очистить палитру</button>
-    </div>
-</section>
+            <div class="palette-section">
+                <h3>Моя палитра</h3>
+                <div id="colorPalette" class="palette">
+                    <!-- Цвета будут добавляться сюда -->
+                </div>
+                <button id="clearPaletteBtn" class="btn secondary-btn">Очистить палитру</button>
+            </div>
+        </section>
+        <!-- 3. ТРЕКЕР ПРОЕКТОВ  -->
+        <section id="projects-section" class="content-section">
+            <h2>📋 Трекер проектов</h2>
+            <p>Скоро здесь будет трекер творческих проектов...</p>
+        </section>
         <!-- ТЕСТОВАЯ СЕКЦИЯ -->
          <div class="content">
             <p>Начало проекта. Версия 0.3</p>
@@ -57,6 +70,7 @@
             <p id="message" class="hidden">✅ JavaScript работает!</p>
         </div>
     </div>
+    <!-- ПОДКЛЮЧЕНИЕ JS -->
     <script src="js/app.js"></script>
     <script src="js/colors.js"></script>
 </body>
