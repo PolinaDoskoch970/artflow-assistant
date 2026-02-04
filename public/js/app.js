@@ -119,4 +119,27 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCounter();
     showIdeas(); //Показываем сохраненные идеи
     console.log('✅ Блокнот идей готов к работе');
+        // ===== ПЕРЕКЛЮЧЕНИЕ МЕЖДУ РАЗДЕЛАМИ =====
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const contentSections = document.querySelectorAll('.content-section');
+    navButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-section');
+            // Убираем активный класс у всех кнопок
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            // Добавляем активный класс нажатой кнопке
+            this.classList.add('active');
+            // Скрываем все секции
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            // Показываем нужную секцию
+            const targetSection = document.getElementById(`${sectionId}-section`);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                console.log(`Переключились на раздел: ${sectionId}`);
+            }
+        });
     });
+    console.log('Навигация настроена');
+});
