@@ -53,4 +53,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });  
     console.log('✅ Трекер проектов готов к добавлению проектов');
+    //Функция отображения проектов
+    function renderProjects() {
+        console.log('Отрисовываю проекты...');
+        const planningColumn = document.getElementById('column-planning');
+        if (!planningColumn) return;
+        planningColumn.innerHTML = '';
+         // Фильтруем проекты для колонки "planning"
+        const planningProjects = projects.filter(p => p.column === 'planning');
+        // Если проектов нет
+        if (planningProjects.length=== 0) {
+            planningColumn.innerHTML = '<p class ="empty-message">Пока нет проектов</р>';
+            return;
+        }
+        // Создаем карточки для каждого проекта
+        planningProjects.forEach(function(project) {
+            const projectCard = document.createElement('div');
+            projectCard.className = 'project-card';
+            projectCard.textContent = project.text;
+            planningColumn.appendChild(projectCard);
+        });
+        console.log('Отображено проектов в "Планирую":', planningProjects.length);        
+    }
 });
