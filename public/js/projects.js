@@ -10,4 +10,17 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     console.log('✅ Элементы трекера проектов найдены');
+ // Массив для проектов
+    let projects = [];
+    // Загружаем из localStorage
+    const savedProjects = localStorage.getItem('artflow-projects');
+    if (savedProjects) {
+        projects = JSON.parse(savedProjects);
+        console.log('Загружено проектов:', projects.length);
+    }
+    // Функция для сохранения
+    function saveProjects() {
+        localStorage.setItem('artflow-projects', JSON.stringify(projects));
+        console.log('Проекты сохранены:', projects.length);
+    }
 });
