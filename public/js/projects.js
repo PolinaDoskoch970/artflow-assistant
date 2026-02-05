@@ -23,4 +23,25 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('artflow-projects', JSON.stringify(projects));
         console.log('Проекты сохранены:', projects.length);
     }
+     // Функция добавления нового проекта
+    function addProject() {
+        const text = projectInput.value.trim();
+        if (text === '') {
+            console.log('Пустое название проекта - игнорирую');
+            return;
+        }
+        console.log('Добавляю проект:', text);
+        // Создаем объект проекта
+        const project = {
+            id: Date.now(), // уникальный ID
+            text: text,
+            column: 'planning', // начальная колонка
+            createdAt: new Date().toLocaleDateString()
+        };
+        projects.push(project);
+        saveProjects();
+        // Очищаем поле ввода
+        projectInput.value = '';
+        console.log('Проект добавлен. Всего:', projects.length);
+    }
 });
