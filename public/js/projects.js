@@ -76,4 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         console.log('Отображено проектов в "Планирую":', planningProjects.length);        
     }
+      // Инициализация
+    renderProjects(); // Показываем сохраненные проекты при загрузке
+    console.log('✅ Трекер проектов полностью инициализирован');
 });
