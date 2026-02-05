@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         saveProjects();
         // Очищаем поле ввода
         projectInput.value = '';
+        renderProjects();
         console.log('Проект добавлен. Всего:', projects.length);
     }
         // Обработчики событий
