@@ -44,4 +44,13 @@ document.addEventListener('DOMContentLoaded', function() {
         projectInput.value = '';
         console.log('Проект добавлен. Всего:', projects.length);
     }
+        // Обработчики событий
+    addProjectBtn.addEventListener('click', addProject);
+    projectInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            console.log('Нажат Enter для добавления проекта');
+            addProject();
+        }
+    });  
+    console.log('✅ Трекер проектов готов к добавлению проектов');
 });
