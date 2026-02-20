@@ -61,16 +61,38 @@
         <!-- 3. ТРЕКЕР ПРОЕКТОВ  -->
         <section id="projects-section" class="content-section">
             <h2>📋 Трекер проектов</h2>
-        <div class="project-form">
-            <input type="text" id="projectInput" 
-                placeholder="Название проекта..."
-                class="project-input">
-            <button id="addProjectBtn" class="btn">Добавить</button>
-        </div>
-        <div class="kanban-board">
-            <div class="kanban-column">
-                <h3>📝 Планирую</h3>
-                <div id="column-planning" class="column-content"></div>
+            <!-- Форма добавления -->
+            <div class="add-project">
+                <input type="text" id="projectNameInput" 
+                    placeholder="Название проекта (например: Портрет друга)"
+                    class="project-input">
+                <button id="addProjectBtn" class="btn">➕ Добавить проект</button>
+            </div>
+        <div id="projects-list" class="projects-list">
+            <!--Пример одного проекта -->
+            <div class="project-card">
+                <h3>🖼️ Портрет друга</h3>
+                <!--Прогресс проекта-->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                    <span class="progress-text">40%</span>
+                </div>
+                <!--Этапы-->
+                <div class="stages">
+                    <div class="stage stage-done">✅ Эскиз</div>
+                    <div class="stage stage-done">✅ Цвета</div>
+                    <div class="stage stage-current">⏳ Детали</div>
+                    <div class="stage stage-pending">✗ Фон</div>
+                    <div class="stage stage-pending">✗ Освещение</div>
+                </div>
+                <!--Кнопки управления-->
+                <div class="project-actions">
+                    <button class="btn-small stage-done-btn" title="Отметить этап выполненным">✓</button>
+                    <button class="btn-small stage-next-btn" title="Перейти к следующему этапу">→</button>
+                    <button class="btn-small stage-delete-btn" title="Удалить проект">✗</button>
+                </div>
             </div>
         </div>
         </section>
