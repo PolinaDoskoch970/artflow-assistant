@@ -64,6 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
      // Функция для показа идей в списке
      function showIdeas() {
         console.log('Показываю идеи...')
+        // Перезагружаем идеи из localStorage
+        const saved = localStorage.getItem('artflow-ideas');
+        if (saved) {
+            ideas = JSON.parse(saved);
+        } else {
+            ideas = [];
+        }
+        updateCounter(); // обновим счётчик
         //Очищаем список
         ideasList.innerHTML = '';
         //Сообщение, если нет идей
@@ -89,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         console.log('Показано идей:', ideas.length);
-     }
+    }
+    window.showIdeas = showIdeas;
     // Функция для удаления идеи
     function deleteIdea(index) {
         console.log(`Удаляю идею с индексом ${index}: "${ideas[index]}"`);

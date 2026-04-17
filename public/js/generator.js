@@ -88,6 +88,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const compactIdea = currentIdea.replace(/\n/g, ' ; ');
         ideasArray.push(currentIdea);
         localStorage.setItem('artflow-ideas', JSON.stringify(ideasArray));
+        console.log('Вызываю showIdeas...');
+        if (typeof window.showIdeas === 'function') {
+            window.showIdeas();
+            console.log('showIdeas вызвана');
+        } else {
+            console.warn('showIdeas не функция');
+        }
+
         alert('Идея сохранена в блокнот!');
     }
     
