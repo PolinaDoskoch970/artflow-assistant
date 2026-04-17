@@ -182,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navButtons.forEach(button => {
         button.addEventListener('click', function() {
             const sectionId = this.getAttribute('data-section');
+            localStorage.setItem('activeSection', sectionId);
             // Убираем активный класс у всех кнопок
             navButtons.forEach(btn => btn.classList.remove('active'));
             // Добавляем активный класс нажатой кнопке
@@ -198,5 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    // Восстановить последнюю активную вкладку
+    const savedSection = localStorage.getItem('activeSection');
+    if (savedSection) {
+        const savedBtn = document.querySelector(`.nav-btn[data-section="${savedSection}"]`);
+        if (savedBtn) savedBtn.click();
+    }
     console.log('Навигация настроена');
 });
