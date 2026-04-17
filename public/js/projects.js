@@ -127,6 +127,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Отрисовка проектов
     function renderProjects() {
+        // Перезагружаем проекты из localStorage
+        const saved = localStorage.getItem('artflow-projects-v2');
+        if (saved) {
+            projects = JSON.parse(saved);
+        } else {
+            projects = [];
+        }
+        console.log('renderProjects: загружено проектов', projects.length);
         console.log('Отрисовка проектов...');
         projectsList.innerHTML = '';
         if (projects.length === 0) {

@@ -152,9 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCounter();
         showIdeas();
         
-        // Обновляем трекер проектов (если функция renderProjects глобальна)
+         // Обновляем трекер проектов
         if (typeof window.renderProjects === 'function') {
             window.renderProjects();
+            console.log('Трекер обновлён');
+        } else {
+            console.warn('renderProjects не доступна');
         }
         console.log(`Идея "${ideaText}" перенесена в трекер проектов`);
     }
