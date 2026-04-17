@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', handleButtonClick);
         });
     }
-    
+    window.renderProjects = renderProjects;
     function handleButtonClick(e) {
         const btn = e.currentTarget;
         const projectId = parseInt(btn.getAttribute('data-id'));
