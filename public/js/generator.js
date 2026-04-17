@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         let savedIdeas = localStorage.getItem('artflow-ideas');
         let ideasArray = savedIdeas ? JSON.parse(savedIdeas) : [];
-        const compactIdea = currentIdea.replace(/\n/g, ' ; ');
-        ideasArray.push(currentIdea);
+        const compactIdea = currentIdea.replace(/\n/g, '; ');
+        ideasArray.push(compactIdea);  
         localStorage.setItem('artflow-ideas', JSON.stringify(ideasArray));
         console.log('Вызываю showIdeas...');
         if (typeof window.showIdeas === 'function') {
