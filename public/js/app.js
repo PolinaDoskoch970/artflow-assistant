@@ -84,9 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const ideaElement = document.createElement('div');
             ideaElement.className = 'idea-item';
             ideaElement.innerHTML = `
-                <span class="idea-text">${ideaText}</span>
-                <button class="delete-btn" data-index="${index}">🗑️</button>
-            `;
+            <span class="idea-text">${ideaText}</span>
+            <div class="idea-actions">
+                <button class="move-to-project-btn" data-index="${index}" title="Перенести в трекер">📋</button>
+                <button class="delete-btn" data-index="${index}" title="Удалить">🗑️</button>
+            </div>
+        `;
             ideasList.appendChild(ideaElement);
             
             // Добавляем обработчик удаления
@@ -94,6 +97,12 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteBtn.addEventListener('click', function() {
                 const deleteIndex = parseInt(this.getAttribute('data-index'));
                 deleteIdea(deleteIndex);
+            });
+            // Обработчик переноса в трекер
+            const moveBtn = ideaElement.querySelector('.move-to-project-btn');
+            moveBtn.addEventListener('click', function() {
+                const moveIndex = parseInt(this.getAttribute('data-index'));
+                moveIdeaToProjects(moveIndex);
             });
         });
         console.log('Показано идей:', ideas.length);
@@ -110,6 +119,45 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCounter();
         showIdeas();
     }     
+        // Функция переноса идеи в трекер проектов
+    function moveIdeaToProjects(index) {
+        const ideaText = ideas[index];
+        if (!ideaText) return;
+        
+        // Получаем текущие проекты из localStorage
+        let projects = localStorage.getItem('artflow-projects-v2');
+        let projectsArray = projects ? JSON.parse(projects) : [];
+        
+        // Создаём новый проект с этапами по умолчанию
+        const newProject = {
+            id: Date.now(),
+            name: ideaText,
+            stages: [
+                { name: 'Эскиз', status: 'current' },
+                { name: 'Цветовая основа', status: 'pending' },
+                { name: 'Детализация', status: 'pending' },
+                { name: 'Фон', status: 'pending' },
+                { name: 'Освещение', status: 'pending' }
+            ],
+            createdAt: new Date().toLocaleDateString()
+        };
+        projectsArray.push(newProject);
+        localStorage.setItem('artflow-projects-v2', JSON.stringify(projectsArray));
+        
+        // Удаляем идею из блокнота
+        ideas.splice(index, 1);
+        localStorage.setItem('artflow-ideas', JSON.stringify(ideas));
+        
+        // Обновляем интерфейс блокнота
+        updateCounter();
+        showIdeas();
+        
+        // Обновляем трекер проектов (если функция renderProjects глобальна)
+        if (typeof window.renderProjects === 'function') {
+            window.renderProjects();
+        }
+        console.log(`Идея "${ideaText}" перенесена в трекер проектов`);
+    }
      // Обработчик для кнопки "Добавить идею"
     if (addIdeaBtn) {
         addIdeaBtn.addEventListener('click', addIdea);
