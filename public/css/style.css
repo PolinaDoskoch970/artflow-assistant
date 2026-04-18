@@ -181,6 +181,81 @@ h1 { color: #6a11cb; margin-bottom: 10px; }
 .secondary-btn:hover {
     background: #ff5252;
 }
+/* ===== Круг Иттена ===== */
+.itten-block {
+    margin-bottom: 2rem;
+}
+.color-wheel {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 1rem auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.wheel-sector {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+.wheel-sector:hover {
+    filter: brightness(0.95);
+}
+
+/* ===== Гармоничные палитры ===== */
+.harmonies-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 2rem 0;
+}
+.palette-card {
+    background: white;
+    border-radius: 12px;
+    padding: 0.8rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 180px;
+}
+.palette-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+.palette-colors {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+}
+.palette-color {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    transition: transform 0.1s;
+}
+.palette-color:hover {
+    transform: scale(1.1);
+}
+.save-palette-btn {
+    background: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    cursor: pointer;
+    width: 100%;
+}
+.save-palette-btn:hover {
+    background: #4a0d9e;
+}
 /* Навигация */
 .main-nav {
     display: flex;
