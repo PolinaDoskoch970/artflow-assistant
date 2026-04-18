@@ -112,6 +112,30 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Палитра очищена');
         }
     });
+        // ===== ШАГ 1: круг Иттена (только визуально) =====
+    const ittenColors = [
+        "#FF0000", "#FF7F00", "#FFFF00", "#BFFF00",
+        "#00FF00", "#00FF7F", "#00FFFF", "#007FFF",
+        "#0000FF", "#7F00FF", "#FF00FF", "#FF007F"
+    ];
+
+    function drawIttenWheel() {
+        const wheel = document.getElementById('colorWheel');
+        if (!wheel) return;
+        wheel.innerHTML = '';
+        const sectorCount = ittenColors.length;
+        const sectorAngle = 360 / sectorCount; // 30 градусов
+        for (let i = 0; i < sectorCount; i++) {
+            const sector = document.createElement('div');
+            sector.className = 'wheel-sector';
+            const rotate = i * sectorAngle;
+            sector.style.transform = `rotate(${rotate}deg) skewY(${90 - sectorAngle}deg)`;
+            sector.style.backgroundColor = ittenColors[i];
+            sector.style.transformOrigin = '100% 100%';
+            wheel.appendChild(sector);
+        }
+    }
+    drawIttenWheel();
     // Инициализация
     updateSelectedColor(colorInput.value);
     renderPalette();
