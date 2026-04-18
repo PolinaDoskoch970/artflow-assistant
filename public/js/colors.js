@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Палитра очищена');
         }
     });
-        // ===== ШАГ 1: круг Иттена (только визуально) =====
+    // Круг Иттена 
     const ittenColors = [
         "#FF0000", "#FF7F00", "#FFFF00", "#BFFF00",
         "#00FF00", "#00FF7F", "#00FFFF", "#007FFF",
@@ -132,6 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
             sector.style.transform = `rotate(${rotate}deg) skewY(${90 - sectorAngle}deg)`;
             sector.style.backgroundColor = ittenColors[i];
             sector.style.transformOrigin = '100% 100%';
+            sector.addEventListener('click', (function(color) {
+                return function() {
+                    colorInput.value = color;
+                    colorHex.value = color;
+                    updateSelectedColor(color);
+                };
+            })(ittenColors[i]));
             wheel.appendChild(sector);
         }
     }
