@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedColor.style.background = color;
         colorValue.textContent = color;
         colorHex.value = color;
+        if (typeof updateComplementary === 'function') updateComplementary();
     }
     // Отображаем палитру
     function renderPalette() {
@@ -143,6 +144,79 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     drawIttenWheel();
+        // Комплементарная палитра 
+    function hexToRgb(hex) {
+        let h = hex.slice(1);
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        const r = parseInt(h.substring(0,2), 16);
+        const g = parseInt(h.substring(2,4), 16);
+        const b = parseInt(h.substring(4,6), 16);
+        return { r, g, b };
+    }
+
+    function rgbToHex(r,g,b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+        function getComplementary(hex) {
+        const normalizedHex = hex.toUpperCase();
+        const index = ittenColors.indexOf(normalizedHex);
+        if (index !== -1) {
+            const compIndex = (index + 6) % 12;
+            return [normalizedHex, ittenColors[compIndex]];
+        }
+        // fallback: инверсия RGB (как работало раньше)
+        const rgb = hexToRgb(hex);
+        const invR = 255 - rgb.r;
+        const invG = 255 - rgb.g;
+        const invB = 255 - rgb.b;
+        return [hex, rgbToHex(invR, invG, invB)];
+    }
+    function renderComplementary(baseColor) {
+        const container = document.getElementById('harmoniesContainer');
+        if (!container) return;
+        const compColors = getComplementary(baseColor);
+        container.innerHTML = `
+            <div class="palette-card">
+                <div class="palette-title">Комплементарная</div>
+                <div class="palette-colors">
+                    <div class="palette-color" style="background: ${compColors[0]};" data-hex="${compColors[0]}"></div>
+                    <div class="palette-color" style="background: ${compColors[1]};" data-hex="${compColors[1]}"></div>
+                </div>
+                <button class="save-palette-btn">💾 Сохранить палитру</button>
+            </div>
+        `;
+        // Копирование HEX при клике на цвет
+        const colorDivs = container.querySelectorAll('.palette-color');
+        colorDivs.forEach(div => {
+            div.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const hex = div.getAttribute('data-hex');
+                navigator.clipboard.writeText(hex);
+                alert(`Скопировано: ${hex}`);
+            });
+        });
+        // Кнопка сохранения палитры
+        const saveBtn = container.querySelector('.save-palette-btn');
+        saveBtn.addEventListener('click', () => {
+            // Добавляем оба цвета в основную палитру (если их там ещё нет)
+            compColors.forEach(color => {
+                if (!palette.includes(color)) {
+                    palette.push(color);
+                }
+            });
+            localStorage.setItem('artflow-palette', JSON.stringify(palette));
+            renderPalette(); // обновляем отображение "Моя палитра"
+            alert('Палитра добавлена в "Моя палитра"');
+        });
+    }
+    // При изменении цвета обновляем комплементарную палитру
+    function updateComplementary() {
+        const currentColor = colorInput.value;
+        renderComplementary(currentColor);
+    }
+    colorInput.addEventListener('input', updateComplementary);
+    colorHex.addEventListener('change', updateComplementary);
     // Инициализация
     updateSelectedColor(colorInput.value);
     renderPalette();
