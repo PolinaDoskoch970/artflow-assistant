@@ -182,12 +182,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return [hex, hex, hex];
     }
+    // Аналоговая (соседние цвета: -1 и +1 сектор)
+    function getAnalogous(hex) {
+        const index = ittenColors.indexOf(hex.toUpperCase());
+        if (index !== -1) {
+            const prev = (index - 1 + 12) % 12;
+            const next = (index + 1) % 12;
+            return [ittenColors[prev], hex, ittenColors[next]];
+        }
+        return [hex, hex, hex];
+    }
         function renderHarmonies(baseColor) {
         const container = document.getElementById('harmoniesContainer');
         if (!container) return;
         const comp = getComplementary(baseColor);
         const tri = getTriadic(baseColor);
-        container.innerHTML = `
+        const analog = getAnalogous(baseColor);
+                container.innerHTML = `
             <div class="palette-card">
                 <div class="palette-title">Комплементарная</div>
                 <div class="palette-colors">
@@ -205,6 +216,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <button class="save-palette-btn" data-palette="tri">💾 Сохранить палитру</button>
             </div>
+            <div class="palette-card">
+                <div class="palette-title">Аналоговая</div>
+                <div class="palette-colors">
+                    <div class="palette-color" style="background: ${analog[0]};" data-hex="${analog[0]}"></div>
+                    <div class="palette-color" style="background: ${analog[1]};" data-hex="${analog[1]}"></div>
+                    <div class="palette-color" style="background: ${analog[2]};" data-hex="${analog[2]}"></div>
+                </div>
+                <button class="save-palette-btn" data-palette="analog">💾 Сохранить палитру</button>
+            </div>
         `;
         // Копирование HEX при клике на цвет
         document.querySelectorAll('.palette-color').forEach(el => {
@@ -221,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let colorsToSave = [];
                 if (btn.dataset.palette === 'comp') colorsToSave = comp;
                 else if (btn.dataset.palette === 'tri') colorsToSave = tri;
+                else if (btn.dataset.palette === 'analog') colorsToSave = analog;
                 colorsToSave.forEach(color => {
                     if (!palette.includes(color)) palette.push(color);
                 });
