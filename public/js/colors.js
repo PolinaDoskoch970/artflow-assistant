@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     drawIttenWheel();
-        // Комплементарная палитра 
+    // Комплементарная палитра 
     function hexToRgb(hex) {
         let h = hex.slice(1);
         if (h.length === 3) h = h.split('').map(c => c + c).join('');
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="palette-color" style="background: ${comp[0]};" data-hex="${comp[0]}"></div>
                     <div class="palette-color" style="background: ${comp[1]};" data-hex="${comp[1]}"></div>
                 </div>
-                <button class="save-palette-btn">💾 Сохранить палитру</button>
+                <button class="save-palette-btn" data-palette="comp">💾 Сохранить палитру</button>
             </div>
             <div class="palette-card">
                 <div class="palette-title">Триада</div>
@@ -203,31 +203,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="palette-color" style="background: ${tri[1]};" data-hex="${tri[1]}"></div>
                     <div class="palette-color" style="background: ${tri[2]};" data-hex="${tri[2]}"></div>
                 </div>
-                <button class="save-palette-btn">💾 Сохранить палитру</button>
+                <button class="save-palette-btn" data-palette="tri">💾 Сохранить палитру</button>
             </div>
         `;
         // Копирование HEX при клике на цвет
-        const colorDivs = container.querySelectorAll('.palette-color');
-        colorDivs.forEach(div => {
-            div.addEventListener('click', (e) => {
+        document.querySelectorAll('.palette-color').forEach(el => {
+            el.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const hex = div.getAttribute('data-hex');
+                const hex = el.getAttribute('data-hex');
                 navigator.clipboard.writeText(hex);
                 alert(`Скопировано: ${hex}`);
             });
         });
-        // Кнопка сохранения палитры
-        const saveBtn = container.querySelector('.save-palette-btn');
-        saveBtn.addEventListener('click', () => {
-            // Добавляем оба цвета в основную палитру (если их там ещё нет)
-            compColors.forEach(color => {
-                if (!palette.includes(color)) {
-                    palette.push(color);
-                }
+        // Сохранение палитр
+        document.querySelectorAll('.save-palette-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                let colorsToSave = [];
+                if (btn.dataset.palette === 'comp') colorsToSave = comp;
+                else if (btn.dataset.palette === 'tri') colorsToSave = tri;
+                colorsToSave.forEach(color => {
+                    if (!palette.includes(color)) palette.push(color);
+                });
+                localStorage.setItem('artflow-palette', JSON.stringify(palette));
+                renderPalette();
+                alert('Палитра добавлена в "Моя палитра"');
             });
-            localStorage.setItem('artflow-palette', JSON.stringify(palette));
-            renderPalette(); // обновляем отображение "Моя палитра"
-            alert('Палитра добавлена в "Моя палитра"');
         });
     }
     // При изменении цвета обновляем комплементарную палитру
