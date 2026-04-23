@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'динамичное', 'спокойное', 'драматичное', 
         'ностальгическое', 'футуристическое'
     ];
-        // ===== ГЕНЕРАТОР ТЕХНИК РИСОВАНИЯ =====
+    // ===== ГЕНЕРАТОР ТЕХНИК РИСОВАНИЯ =====
     const techniquesWithTools = [
         { name: 'Акварель', tools: 'кисти, бумага для акварели, вода' },
         { name: 'Масло', tools: 'кисти, холст, масло, разбавитель' },
@@ -59,6 +59,46 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     let currentTechnique = '';
+
+    function generateRandomTechnique() {
+        const randomIndex = Math.floor(Math.random() * techniquesWithTools.length);
+        const tech = techniquesWithTools[randomIndex];
+        currentTechnique = `${tech.name}\nИнструменты: ${tech.tools}`;
+        return currentTechnique;
+    }
+
+    function displayRandomTechnique() {
+        const techniqueDisplay = document.getElementById('generatedTechnique');
+        if (!techniqueDisplay) return;
+        const tech = generateRandomTechnique();
+        techniqueDisplay.innerHTML = tech.replace(/\n/g, '<br>');
+    }
+
+    function saveTechniqueToNotebook() {
+        if (!currentTechnique) {
+            alert('Сначала сгенерируйте технику!');
+            return;
+        }
+        let savedIdeas = localStorage.getItem('artflow-ideas');
+        let ideasArray = savedIdeas ? JSON.parse(savedIdeas) : [];
+        const compactTech = currentTechnique.replace(/\n/g, '; ');
+        ideasArray.push(compactTech);
+        localStorage.setItem('artflow-ideas', JSON.stringify(ideasArray));
+        if (typeof window.showIdeas === 'function') {
+            window.showIdeas();
+        }
+        alert('Техника сохранена в блокнот!');
+    }
+
+    // Инициализация кнопок генератора техник
+    const generateTechBtn = document.getElementById('generateTechniqueBtn');
+    const saveTechBtn = document.getElementById('saveTechniqueBtn');
+    if (generateTechBtn && saveTechBtn) {
+        generateTechBtn.addEventListener('click', displayRandomTechnique);
+        saveTechBtn.addEventListener('click', saveTechniqueToNotebook);
+        displayRandomTechnique(); // показать первую технику при загрузке
+    }
+
     // Текущая сгенерированная идея
     let currentIdea = '';
     
