@@ -172,16 +172,36 @@ document.addEventListener('DOMContentLoaded', function() {
         const invB = 255 - rgb.b;
         return [hex, rgbToHex(invR, invG, invB)];
     }
-    function renderComplementary(baseColor) {
+    // Триада (через 4 и 8 секторов)
+    function getTriadic(hex) {
+        const index = ittenColors.indexOf(hex.toUpperCase());
+        if (index !== -1) {
+            const idx1 = (index + 4) % 12;
+            const idx2 = (index + 8) % 12;
+            return [hex, ittenColors[idx1], ittenColors[idx2]];
+        }
+        return [hex, hex, hex];
+    }
+        function renderHarmonies(baseColor) {
         const container = document.getElementById('harmoniesContainer');
         if (!container) return;
-        const compColors = getComplementary(baseColor);
+        const comp = getComplementary(baseColor);
+        const tri = getTriadic(baseColor);
         container.innerHTML = `
             <div class="palette-card">
                 <div class="palette-title">Комплементарная</div>
                 <div class="palette-colors">
-                    <div class="palette-color" style="background: ${compColors[0]};" data-hex="${compColors[0]}"></div>
-                    <div class="palette-color" style="background: ${compColors[1]};" data-hex="${compColors[1]}"></div>
+                    <div class="palette-color" style="background: ${comp[0]};" data-hex="${comp[0]}"></div>
+                    <div class="palette-color" style="background: ${comp[1]};" data-hex="${comp[1]}"></div>
+                </div>
+                <button class="save-palette-btn">💾 Сохранить палитру</button>
+            </div>
+            <div class="palette-card">
+                <div class="palette-title">Триада</div>
+                <div class="palette-colors">
+                    <div class="palette-color" style="background: ${tri[0]};" data-hex="${tri[0]}"></div>
+                    <div class="palette-color" style="background: ${tri[1]};" data-hex="${tri[1]}"></div>
+                    <div class="palette-color" style="background: ${tri[2]};" data-hex="${tri[2]}"></div>
                 </div>
                 <button class="save-palette-btn">💾 Сохранить палитру</button>
             </div>
@@ -213,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // При изменении цвета обновляем комплементарную палитру
     function updateComplementary() {
         const currentColor = colorInput.value;
-        renderComplementary(currentColor);
+        renderHarmonies(currentColor);
     }
     colorInput.addEventListener('input', updateComplementary);
     colorHex.addEventListener('change', updateComplementary);
