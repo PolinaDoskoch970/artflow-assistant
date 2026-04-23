@@ -1,5 +1,5 @@
 // Сообщение при загрузке скрипта
-console.log('ArtFlow Assistant v0.2 запущен!');
+console.log('ArtFlow Assistant запущен!');
 // Полная загрузка  
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM готов');
