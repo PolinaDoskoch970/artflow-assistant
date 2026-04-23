@@ -192,12 +192,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return [hex, hex, hex];
     }
+    // Тетрада (через 3, 6, 9 секторов)
+    function getTetradic(hex) {
+        const index = ittenColors.indexOf(hex.toUpperCase());
+        if (index !== -1) {
+            const idx1 = (index + 3) % 12;
+            const idx2 = (index + 6) % 12;
+            const idx3 = (index + 9) % 12;
+            return [hex, ittenColors[idx1], ittenColors[idx2], ittenColors[idx3]];
+        }
+        return [hex, hex, hex, hex];
+    }
         function renderHarmonies(baseColor) {
         const container = document.getElementById('harmoniesContainer');
         if (!container) return;
         const comp = getComplementary(baseColor);
         const tri = getTriadic(baseColor);
         const analog = getAnalogous(baseColor);
+        const tetra = getTetradic(baseColor);
                 container.innerHTML = `
             <div class="palette-card">
                 <div class="palette-title">Комплементарная</div>
@@ -225,6 +237,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <button class="save-palette-btn" data-palette="analog">💾 Сохранить палитру</button>
             </div>
+            <div class="palette-card">
+                <div class="palette-title">Тетрада</div>
+                <div class="palette-colors">
+                    <div class="palette-color" style="background: ${tetra[0]};" data-hex="${tetra[0]}"></div>
+                    <div class="palette-color" style="background: ${tetra[1]};" data-hex="${tetra[1]}"></div>
+                    <div class="palette-color" style="background: ${tetra[2]};" data-hex="${tetra[2]}"></div>
+                    <div class="palette-color" style="background: ${tetra[3]};" data-hex="${tetra[3]}"></div>
+                </div>
+                <button class="save-palette-btn" data-palette="tetra">💾 Сохранить палитру</button>
+            </div>
         `;
         // Копирование HEX при клике на цвет
         document.querySelectorAll('.palette-color').forEach(el => {
@@ -242,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (btn.dataset.palette === 'comp') colorsToSave = comp;
                 else if (btn.dataset.palette === 'tri') colorsToSave = tri;
                 else if (btn.dataset.palette === 'analog') colorsToSave = analog;
+                else if (btn.dataset.palette === 'tetra') colorsToSave = tetra;
                 colorsToSave.forEach(color => {
                     if (!palette.includes(color)) palette.push(color);
                 });
