@@ -1,137 +1,142 @@
 // Сообщение при загрузке скрипта
-console.log('ArtFlow Assistant запущен!');
-// Полная загрузка  
+console.log('ArtFlow Assistant v0.9 (с бэкендом) запущен!');
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM готов');
-     // ТЕСТОВАЯ КНОПКА
+
+    // ===== ТЕСТОВАЯ КНОПКА =====
     const btn = document.getElementById('testBtn');
     const msg = document.getElementById('message');
-    console.log('Найдена кнопка?', btn);
-    console.log('Найдено сообщение?', msg);
-    btn.addEventListener('click', () => {
-        console.log('Кнопка нажата');
-        msg.classList.remove('hidden');
-        btn.disabled = true;
-    }); 
-    console.log('Система инициализирована');
-// ===== БЛОКНОТ ИДЕЙ =====
-    // Находим элементы для работы с идеями
+    if (btn && msg) {
+        btn.addEventListener('click', () => {
+            console.log('Кнопка нажата');
+            msg.classList.remove('hidden');
+            btn.disabled = true;
+        });
+    }
+
+    // ===== БЛОКНОТ ИДЕЙ (с сервером) =====
     const ideaInput = document.getElementById('ideaInput');
     const addIdeaBtn = document.getElementById('addIdeaBtn');
     const ideasList = document.getElementById('ideasList');
     const ideasCount = document.getElementById('ideasCount');
-    
-    console.log('Найдены элементы для идей:', {
-        input: ideaInput,
-        button: addIdeaBtn,
-        list: ideasList,
-        counter: ideasCount
-    });
-    // Массив для хранения идей
-    let ideas = [];
-    // Загружаем сохраненные идеи из localStorage
-    const savedIdeas = localStorage.getItem('artflow-ideas');
-    if (savedIdeas) {
-        ideas = JSON.parse(savedIdeas);
-        console.log('Загружено идей из localStorage:', ideas.length);
-    }
-    // Функция для обновления счетчика
+
+    let ideas = []; // массив объектов { id, text, created_at }
+
+    // ---- Вспомогательные функции ----
     function updateCounter() {
         if (ideasCount) {
             ideasCount.textContent = `(${ideas.length})`;
-            console.log(`Счетчик: ${ideas.length} идей`);
         }
     }
-    // Функция для добавления новой идеи
-    function addIdea() {
+
+    // ---- Загрузка идей с сервера ----
+    async function showIdeas() {
+        try {
+            const response = await fetch('http://localhost:3000/api/ideas');
+            if (!response.ok) throw new Error('Ошибка загрузки');
+            ideas = await response.json();
+            updateCounter();
+
+            ideasList.innerHTML = '';
+            if (ideas.length === 0) {
+                ideasList.innerHTML = '<p class="empty-message">Пока нет идей. Добавьте первую!</p>';
+                return;
+            }
+
+            ideas.forEach(idea => {
+                const ideaElement = document.createElement('div');
+                ideaElement.className = 'idea-item';
+                ideaElement.innerHTML = `
+                    <span class="idea-text">${idea.text}</span>
+                    <div class="idea-actions">
+                        <button class="move-to-project-btn" data-id="${idea.id}" title="Перенести в трекер">📋</button>
+                        <button class="delete-btn" data-id="${idea.id}" title="Удалить">🗑️</button>
+                    </div>
+                `;
+                ideasList.appendChild(ideaElement);
+            });
+
+            // Обработчики для кнопок (делегирование)
+            ideasList.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    deleteIdea(id);
+                });
+            });
+
+            ideasList.querySelectorAll('.move-to-project-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    moveIdeaToProjects(id);
+                });
+            });
+
+            console.log('Идеи загружены:', ideas.length);
+
+        } catch (err) {
+            console.error('Ошибка загрузки идей:', err);
+            ideasList.innerHTML = '<p class="empty-message">⚠️ Ошибка загрузки идей с сервера</p>';
+        }
+    }
+
+    // ---- Добавление идеи (POST) ----
+    async function addIdea() {
         if (!ideaInput) return;
         const text = ideaInput.value.trim();
         if (text === '') {
-            console.log('Пустая идея - игнорирую');
+            console.log('Пустая идея');
             return;
         }
-        console.log(`Добавляю идею: "${text}"`);
-        // Добавляем в массив
-        ideas.push(text);
-        localStorage.setItem('artflow-ideas', JSON.stringify(ideas));
-        // Очищаем поле ввода
-        ideaInput.value = '';
-        // Обновляем счетчик
-        updateCounter();  
-        showIdeas(); // ПОКАЗЫВАЕМ ИДЕИ В СПИСКЕ
-        console.log(`Теперь идей: ${ideas.length}`);
-    }
-     // Функция для показа идей в списке
-     function showIdeas() {
-        console.log('Показываю идеи...')
-        // Перезагружаем идеи из localStorage
-        const saved = localStorage.getItem('artflow-ideas');
-        if (saved) {
-            ideas = JSON.parse(saved);
-        } else {
-            ideas = [];
+
+        try {
+            const response = await fetch('http://localhost:3000/api/ideas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            if (!response.ok) throw new Error('Ошибка добавления');
+            const newIdea = await response.json();
+            console.log('Добавлена идея:', newIdea);
+            ideaInput.value = '';
+            await showIdeas(); // обновляем список
+        } catch (err) {
+            console.error(err);
+            alert('Не удалось добавить идею на сервер');
         }
-        updateCounter(); // обновим счётчик
-        //Очищаем список
-        ideasList.innerHTML = '';
-        //Сообщение, если нет идей
-        if (ideas.length === 0) {
-             ideasList.innerHTML = '<p class="empty-message">Пока нет идей. Добавьте первую!</p>';
-            return;
-         }
-         //Для каждой идеи создаем элемент
-        ideas.forEach(function(ideaText, index) {
-            const ideaElement = document.createElement('div');
-            ideaElement.className = 'idea-item';
-            ideaElement.innerHTML = `
-            <span class="idea-text">${ideaText}</span>
-            <div class="idea-actions">
-                <button class="move-to-project-btn" data-index="${index}" title="Перенести в трекер">📋</button>
-                <button class="delete-btn" data-index="${index}" title="Удалить">🗑️</button>
-            </div>
-        `;
-            ideasList.appendChild(ideaElement);
-            
-            // Добавляем обработчик удаления
-            const deleteBtn = ideaElement.querySelector('.delete-btn');
-            deleteBtn.addEventListener('click', function() {
-                const deleteIndex = parseInt(this.getAttribute('data-index'));
-                deleteIdea(deleteIndex);
-            });
-            // Обработчик переноса в трекер
-            const moveBtn = ideaElement.querySelector('.move-to-project-btn');
-            moveBtn.addEventListener('click', function() {
-                const moveIndex = parseInt(this.getAttribute('data-index'));
-                moveIdeaToProjects(moveIndex);
-            });
-        });
-        console.log('Показано идей:', ideas.length);
     }
-    window.showIdeas = showIdeas;
-    // Функция для удаления идеи
-    function deleteIdea(index) {
-        console.log(`Удаляю идею с индексом ${index}: "${ideas[index]}"`);
-        // Удаляем из массива
-        ideas.splice(index, 1);
-        // Сохраняем в localStorage
-        localStorage.setItem('artflow-ideas', JSON.stringify(ideas)); 
-        // Обновляем интерфейс
-        updateCounter();
-        showIdeas();
-    }     
-        // Функция переноса идеи в трекер проектов
-    function moveIdeaToProjects(index) {
-        const ideaText = ideas[index];
-        if (!ideaText) return;
-        
-        // Получаем текущие проекты из localStorage
+
+    // ---- Удаление идеи (DELETE) ----
+    async function deleteIdea(id) {
+        if (!confirm('Удалить идею?')) return;
+        try {
+            const response = await fetch(`http://localhost:3000/api/ideas/${id}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error('Ошибка удаления');
+            console.log(`Идея ${id} удалена`);
+            await showIdeas();
+        } catch (err) {
+            console.error(err);
+            alert('Не удалось удалить идею с сервера');
+        }
+    }
+
+    // ---- Перенос идеи в проект (пока локально) ----
+    function moveIdeaToProjects(id) {
+        const idea = ideas.find(item => item.id === id);
+        if (!idea) {
+            alert('Идея не найдена');
+            return;
+        }
+
+        // Получаем текущие проекты из localStorage (пока так)
         let projects = localStorage.getItem('artflow-projects-v2');
         let projectsArray = projects ? JSON.parse(projects) : [];
-        
-        // Создаём новый проект с этапами по умолчанию
+
         const newProject = {
             id: Date.now(),
-            name: ideaText,
+            name: idea.text,
             stages: [
                 { name: 'Эскиз', status: 'current' },
                 { name: 'Цветовая основа', status: 'pending' },
@@ -143,70 +148,53 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         projectsArray.push(newProject);
         localStorage.setItem('artflow-projects-v2', JSON.stringify(projectsArray));
-        
-        // Удаляем идею из блокнота
-        ideas.splice(index, 1);
-        localStorage.setItem('artflow-ideas', JSON.stringify(ideas));
-        
-        // Обновляем интерфейс блокнота
-        updateCounter();
-        showIdeas();
-        
-         // Обновляем трекер проектов
+
+        // Удаляем идею с сервера
+        deleteIdea(id); // она сама обновит список
+
+        // Обновляем трекер, если функция доступна
         if (typeof window.renderProjects === 'function') {
             window.renderProjects();
-            console.log('Трекер обновлён');
-        } else {
-            console.warn('renderProjects не доступна');
         }
-        console.log(`Идея "${ideaText}" перенесена в трекер проектов`);
+        alert('Идея перенесена в проект!');
     }
-     // Обработчик для кнопки "Добавить идею"
+
+    // ---- Обработчики событий ----
     if (addIdeaBtn) {
         addIdeaBtn.addEventListener('click', addIdea);
-        console.log('Обработчик добавлен на кнопку');
     }
-        // Обработчик для клавиши Enter
     if (ideaInput) {
         ideaInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                console.log('Нажат Enter');
-                addIdea();
-            }
+            if (e.key === 'Enter') addIdea();
         });
     }
-    // Инициализируем счетчик
-    updateCounter();
-    showIdeas(); //Показываем сохраненные идеи
-    console.log('✅ Блокнот идей готов к работе');
-        // ===== ПЕРЕКЛЮЧЕНИЕ МЕЖДУ РАЗДЕЛАМИ =====
+
+    // ---- Инициализация ----
+    showIdeas();
+    console.log('✅ Блокнот идей с бэкендом готов');
+
+    // ===== НАВИГАЦИЯ =====
     const navButtons = document.querySelectorAll('.nav-btn');
     const contentSections = document.querySelectorAll('.content-section');
+
     navButtons.forEach(button => {
         button.addEventListener('click', function() {
             const sectionId = this.getAttribute('data-section');
             localStorage.setItem('activeSection', sectionId);
-            // Убираем активный класс у всех кнопок
             navButtons.forEach(btn => btn.classList.remove('active'));
-            // Добавляем активный класс нажатой кнопке
             this.classList.add('active');
-            // Скрываем все секции
-            contentSections.forEach(section => {
-                section.classList.remove('active');
-            });
-            // Показываем нужную секцию
+            contentSections.forEach(section => section.classList.remove('active'));
             const targetSection = document.getElementById(`${sectionId}-section`);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                console.log(`Переключились на раздел: ${sectionId}`);
-            }
+            if (targetSection) targetSection.classList.add('active');
         });
     });
-    // Восстановить последнюю активную вкладку
+
+    // Восстанавливаем активную вкладку
     const savedSection = localStorage.getItem('activeSection');
     if (savedSection) {
         const savedBtn = document.querySelector(`.nav-btn[data-section="${savedSection}"]`);
         if (savedBtn) savedBtn.click();
     }
-    console.log('Навигация настроена');
+
+    console.log('✅ Навигация настроена');
 });
