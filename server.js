@@ -8,10 +8,10 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Подключение к БД (файл artflow.db создастся автоматически)
+// Подключение к БД 
 const db = new Database('./artflow.db');
 
-// Создание таблиц (если их нет)
+// Создание таблиц
 db.exec(`
     CREATE TABLE IF NOT EXISTS ideas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,6 +57,22 @@ app.post('/api/ideas', (req, res) => {
         const info = stmt.run(text.trim());
         const newIdea = db.prepare('SELECT * FROM ideas WHERE id = ?').get(info.lastInsertRowid);
         res.status(201).json(newIdea);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// DELETE /api/ideas/:id — удалить идею по id
+app.delete('/api/ideas/:id', (req, res) => {
+    try {
+        const id = req.params.id;
+        const stmt = db.prepare('DELETE FROM ideas WHERE id = ?');
+        const result = stmt.run(id);
+        if (result.changes === 0) {
+            return res.status(404).json({ error: 'Идея не найдена' });
+        }
+        res.json({ message: 'Идея удалена' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: err.message });
