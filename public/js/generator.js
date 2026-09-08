@@ -74,22 +74,30 @@ document.addEventListener('DOMContentLoaded', function() {
         techniqueDisplay.innerHTML = tech.replace(/\n/g, '<br>');
     }
 
-    function saveTechniqueToNotebook() {
+    async function saveTechniqueToNotebook() {
         if (!currentTechnique) {
             alert('Сначала сгенерируйте технику!');
             return;
         }
-        let savedIdeas = localStorage.getItem('artflow-ideas');
-        let ideasArray = savedIdeas ? JSON.parse(savedIdeas) : [];
+        try {
         const compactTech = currentTechnique.replace(/\n/g, '; ');
-        ideasArray.push(compactTech);
-        localStorage.setItem('artflow-ideas', JSON.stringify(ideasArray));
+        const response = await fetch('http://localhost:3000/api/ideas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: compactTech })
+        });
+        if (!response.ok) throw new Error('Ошибка сохранения');
+        const newIdea = await response.json();
+        console.log('Техника сохранена на сервере:', newIdea);
         if (typeof window.showIdeas === 'function') {
             window.showIdeas();
         }
-        alert('Техника сохранена в блокнот!');
+        alert('Техника сохранена в блокнот (на сервере)!');
+    } catch (err) {
+        console.error(err);
+        alert('Не удалось сохранить технику на сервер');
     }
-
+}
     // Инициализация кнопок генератора техник
     const generateTechBtn = document.getElementById('generateTechniqueBtn');
     const saveTechBtn = document.getElementById('saveTechniqueBtn');
@@ -132,26 +140,30 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Сгенерирована идея:', currentIdea);
     }
     
-    function saveIdeaToNotebook() {
+    async function saveIdeaToNotebook() {
         if (!currentIdea) {
             alert('Сначала сгенерируйте идею!');
             return;
         }
-        let savedIdeas = localStorage.getItem('artflow-ideas');
-        let ideasArray = savedIdeas ? JSON.parse(savedIdeas) : [];
+        try {
         const compactIdea = currentIdea.replace(/\n/g, '; ');
-        ideasArray.push(compactIdea);  
-        localStorage.setItem('artflow-ideas', JSON.stringify(ideasArray));
-        console.log('Вызываю showIdeas...');
+        const response = await fetch('http://localhost:3000/api/ideas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: compactIdea })
+        });
+        if (!response.ok) throw new Error('Ошибка сохранения');
+        const newIdea = await response.json();
+        console.log('Идея сохранена на сервере:', newIdea);
         if (typeof window.showIdeas === 'function') {
             window.showIdeas();
-            console.log('showIdeas вызвана');
-        } else {
-            console.warn('showIdeas не функция');
         }
-
-        alert('Идея сохранена в блокнот!');
+        alert('Идея сохранена в блокнот (на сервере)!');
+    } catch (err) {
+        console.error(err);
+        alert('Не удалось сохранить идею на сервер');
     }
+}
     
     generateBtn.addEventListener('click', displayRandomIdea);
     saveBtn.addEventListener('click', saveIdeaToNotebook);
