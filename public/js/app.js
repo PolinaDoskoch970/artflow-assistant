@@ -1,5 +1,5 @@
 // Сообщение при загрузке скрипта
-console.log('ArtFlow Assistant v0.9 (с бэкендом) запущен!');
+console.log('ArtFlow Assistant v1.0 (с бэкендом) запущен!');
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM готов');
@@ -123,41 +123,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---- Перенос идеи в проект (пока локально) ----
-    function moveIdeaToProjects(id) {
+    async function moveIdeaToProjects(id) {
         const idea = ideas.find(item => item.id === id);
         if (!idea) {
             alert('Идея не найдена');
             return;
         }
+        try {
+        // 1. Создаём проект через API
+        const response = await fetch('http://localhost:3000/api/projects', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: idea.text })
+        });
+        if (!response.ok) throw new Error('Ошибка создания проекта');
+        const newProject = await response.json();
+        console.log('Проект создан:', newProject);
 
-        // Получаем текущие проекты из localStorage (пока так)
-        let projects = localStorage.getItem('artflow-projects-v2');
-        let projectsArray = projects ? JSON.parse(projects) : [];
+        // 2. Удаляем идею через API
+        const deleteResponse = await fetch(`http://localhost:3000/api/ideas/${id}`, {
+            method: 'DELETE'
+        });
+        if (!deleteResponse.ok) throw new Error('Ошибка удаления идеи');
 
-        const newProject = {
-            id: Date.now(),
-            name: idea.text,
-            stages: [
-                { name: 'Эскиз', status: 'current' },
-                { name: 'Цветовая основа', status: 'pending' },
-                { name: 'Детализация', status: 'pending' },
-                { name: 'Фон', status: 'pending' },
-                { name: 'Освещение', status: 'pending' }
-            ],
-            createdAt: new Date().toLocaleDateString()
-        };
-        projectsArray.push(newProject);
-        localStorage.setItem('artflow-projects-v2', JSON.stringify(projectsArray));
-
-        // Удаляем идею с сервера
-        deleteIdea(id); // она сама обновит список
-
-        // Обновляем трекер, если функция доступна
+        // 3. Обновляем интерфейс
+        await showIdeas();
         if (typeof window.renderProjects === 'function') {
             window.renderProjects();
         }
         alert('Идея перенесена в проект!');
+    } catch (err) {
+        console.error(err);
+        alert('Ошибка при переносе идеи в проект');
     }
+}
 
     // ---- Обработчики событий ----
     if (addIdeaBtn) {
